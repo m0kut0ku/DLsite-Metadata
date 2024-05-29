@@ -481,7 +481,7 @@ class DLsiteMetadata(Source):
 
         book_maker_elements = tree.xpath("//table[@id='work_maker']/tr")
         if book_maker_elements:
-            log.info(f"DLsiteMetadata::_lookup_metadata: Got book_maker_elements{self.prefs['country']}")
+            log.info(f"DLsiteMetadata::_lookup_metadata: Got book_maker_elements")
             for x in book_maker_elements:
                 descriptor = x.xpath("th")[0].text.strip()
                 if descriptor == self.TRANSLATIONS[self.prefs['country']]['Author1']:

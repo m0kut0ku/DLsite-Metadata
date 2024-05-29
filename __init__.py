@@ -39,7 +39,7 @@ class DLsiteMetadata(Source):
     has_html_comments = True
     supports_gzip_transfer_encoding = True
 
-    BASE_URL = "https://www.dlsite.com/"
+    BASE_URL = "https://www.dlsite.com"
 
     COUNTRIES = {
         "ja_JP": _("日本語"),
@@ -292,7 +292,7 @@ class DLsiteMetadata(Source):
     def get_book_url(self, identifiers) -> Optional[Tuple]:
         product_id = identifiers.get("dlsite", None)
         if product_id:
-            return ("product_id", product_id, f"{self.BASE_URL}books/work/=/product_id/{product_id}?locale={self.prefs['country']}")
+            return ("product_id", product_id, f"{self.BASE_URL}/books/work/=/product_id/{product_id}?locale={self.prefs['country']}")
         return None
 
     def get_cached_cover_url(self, identifiers) -> Optional[str]:
@@ -321,7 +321,7 @@ class DLsiteMetadata(Source):
         if product_id:
             log.info(f"DLsiteMetadata::identify: Getting metadata with product_id: {product_id}")
             # product_id searches will (sometimes) redirect to the product page
-            url = f"{self.BASE_URL}books/work/=/product_id/{product_id}?locale={self.prefs['country']}"
+            url = f"{self.BASE_URL}/books/work/=/product_id/{product_id}?locale={self.prefs['country']}"
             product_id_urls = self._get_webpage(url, log, timeout)
             if product_id_urls:
                 urls.append(url)
@@ -387,7 +387,7 @@ class DLsiteMetadata(Source):
         result_queue.put((self, cover))
 
     def _get_search_url(self, search_str: str) -> str:
-        return f"{self.BASE_URL}maniax/fsr/=/language/jp/sex_category%5B0%5D/male/keyword/{quote(search_str)}"
+        return f"{self.BASE_URL}/maniax/fsr/=/language/jp/sex_category%5B0%5D/male/keyword/{quote(search_str)}"
 
     def _generate_query(self, title: str, authors: list[str]) -> str:
         # Remove leading zeroes from the title if configured
@@ -480,8 +480,6 @@ class DLsiteMetadata(Source):
         locale.setlocale(locale.LC_TIME, f"{self.prefs['country']}.UTF-8")
 
         book_maker_elements = tree.xpath("//table[@id='work_maker']/tr")
-        work_maker = html.tostring(tree.xpath("//table[@id='work_maker']")[0], method="html")
-        log.info(f"DLsiteMetadata::_lookup_metadata: Got work_maker: {work_maker}")
         if book_maker_elements:
             log.info(f"DLsiteMetadata::_lookup_metadata: Got book_maker_elements{self.prefs['country']}")
             for x in book_maker_elements:
